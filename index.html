@@ -113,14 +113,18 @@
             transform: scale(1.05);
         }
         .hero h1 {
-            font-size: 3.5rem;
-            margin-bottom: 10px;
-            font-weight: 700;
-            background: linear-gradient(45deg, #0ea5e9, #06b6d4);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: typeWriter 2s steps(40, end) 0.5s both;
-        }
+    font-size: 3.5rem;
+    margin-bottom: 10px;
+    font-weight: 700;
+    background: linear-gradient(45deg, #0ea5e9, #06b6d4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    overflow: hidden;
+    white-space: nowrap;
+    width: 0;
+    animation: typeWriter 2s steps(40, end) forwards;
+}
         .hero p {
             color: #94a3b8;
             margin-bottom: 30px;
@@ -491,16 +495,15 @@
             <p>As a licensed professional teacher with a BS in Engineering Technology, I am passionate about fostering a dynamic learning environment where technology and education intersect. With years of experience in curriculum development and classroom innovation, I strive to inspire students through hands-on projects and interactive tools that prepare them for the future.</p>
         </section>
 
-        <section id="personal" class="section">
-            <h2>Personal Information</h2>
-            <div class="personal-info">
-              <div><span>📍</span> 205 E Rodriguez Sr. Ave. Damayang Lagi Quezon City.</div>
-                <div><span>📧</span> requillojerom@email.com</div>
-                <div><span>💼</span> Licensed Professional Teacher</div>
-                <div><span>🎓</span> BS Engineering Technology</div>
-            </div>
-        </section>
-
+       <section id="personal" class="section">
+    <h2>Personal Information</h2>
+    <div class="personal-info">
+        <div><span>📍</span><p>205 E Rodriguez Sr. Ave. Quezon City</p></div>
+        <div><span>🎓</span><p>Licensed Professional Teacher</p></div>
+        <div><span>🎵</span><p>BS Engineering Technology</p></div>
+    </div>
+</section>
+            
         <section id="education" class="section">
             <h2>Educational Attainment</h2>
             <div class="cards">
@@ -826,6 +829,35 @@
             this.reset();
         });
     </script>
+<script>
+    function toggleTheme() {
+        document.body.classList.toggle('light-mode');
+    }
 
+    const sections = document.querySelectorAll('.section');
+    window.addEventListener('scroll', () => {
+        sections.forEach(section => {
+            const rect = section.getBoundingClientRect();
+            if (rect.top < window.innerHeight - 100) {
+                section.classList.add('visible');
+            }
+        });
+    });
+
+    const scrollBtn = document.querySelector('.scroll-to-top');
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 300) {
+            scrollBtn.classList.add('show');
+        } else {
+            scrollBtn.classList.remove('show');
+        }
+    });
+
+    scrollBtn?.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+</script>
+<div class="scroll-to-top">↑</div>
+    
 </body>
 </html>
