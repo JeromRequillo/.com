@@ -915,116 +915,104 @@
     </div>
 
     <script>
-        // Custom Cursor
-        const cursor = document.querySelector('.cursor');
-        const cursorTrail = document.querySelector('.cursor-trail');
-        document.addEventListener('mousemove', (e) => {
-            cursor.style.left = e.clientX + 'px';
-            cursor.style.top = e.clientY + 'px';
-            cursorTrail.style.left = e.clientX + 'px';
-            cursorTrail.style.top = e.clientY + 'px';
-        });
 
-        // Modal functions
-        function openModal(modalId) {
-            document.getElementById(modalId).style.display = 'block';
+       // MODAL FUNCTIONS (CLEAN VERSION)
+function openModal(modalId) {
+    document.getElementById(modalId).classList.add('show');
+    document.getElementById(modalId).style.display = 'block';
+}
+
+function closeModal(modalId) {
+    document.getElementById(modalId).classList.remove('show');
+    document.getElementById(modalId).style.display = 'none';
+}
+
+// Close modal when clicking outside
+window.onclick = function(event) {
+    const modals = document.querySelectorAll('.modal');
+    modals.forEach(modal => {
+        if (event.target === modal) {
+            modal.style.display = 'none';
         }
+    });
+};
 
-        function closeModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
+// THEME TOGGLE (MAS SMOOTH)
+function toggleTheme() {
+    const body = document.body;
+    const toggleIcon = document.querySelector('.toggle-theme');
+
+    body.classList.toggle('light-mode');
+
+    if (body.classList.contains('light-mode')) {
+        toggleIcon.textContent = '☀️';
+        localStorage.setItem('theme', 'light');
+    } else {
+        toggleIcon.textContent = '🌙';
+        localStorage.setItem('theme', 'dark');
+    }
+}
+
+// SAVE THEME PREFERENCE
+window.onload = function() {
+    const savedTheme = localStorage.getItem('theme');
+    const toggleIcon = document.querySelector('.toggle-theme');
+
+    if (savedTheme === 'light') {
+        document.body.classList.add('light-mode');
+        toggleIcon.textContent = '☀️';
+    }
+};
+
+// ONE CLEAN OBSERVER FOR ALL ANIMATIONS (NO BUGS)
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, index) => {
+        if (entry.isIntersecting) {
+            setTimeout(() => {
+                entry.target.classList.add('visible');
+            }, index * 80);
         }
+    });
+}, { threshold: 0.1 });
 
-        // Close modal when clicking outside
-        window.onclick = function(event) {
-            const modals = document.querySelectorAll('.modal');
-            modals.forEach(modal => {
-                if (event.target === modal) {
-                    modal.style.display = 'none';
-                }
-            });
-        };
+document.querySelectorAll('.section, .card, .project-card, .testimonial').forEach(el => {
+    observer.observe(el);
+});
 
-        // Theme toggle
-        function toggleTheme() {
-            const body = document.body;
-            const toggleIcon = document.querySelector('.toggle-theme');
-            body.classList.toggle('light-mode');
-            toggleIcon.textContent = body.classList.contains('light-mode') ? '☀️' : '🌙';
-        }
+// SMOOTH PARALLAX (MAS PRO)
+window.addEventListener('scroll', () => {
+    const hero = document.querySelector('.hero');
+    const scrolled = window.scrollY;
+    hero.style.backgroundPositionY = `${scrolled * 0.2}px`;
+});
 
-        // Scroll animations
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        }, { threshold: 0.1 });
+// SCROLL TO TOP BUTTON
+function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
 
-        document.querySelectorAll('.section').forEach(section => {
-            observer.observe(section);
-        });
+window.addEventListener('scroll', () => {
+    const scrollButton = document.querySelector('.scroll-to-top');
+    if (window.scrollY > 300) {
+        scrollButton.classList.add('show');
+    } else {
+        scrollButton.classList.remove('show');
+    }
+});
 
-        // Scroll to Top functionality
-        function scrollToTop() {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
+// CONTACT FORM (WORKING VERSION)
+document.getElementById('contactForm').addEventListener('submit', function(event) {
+    event.preventDefault();
 
-        // Show/Hide Scroll to Top Button
-        window.addEventListener('scroll', () => {
-            const scrollButton = document.querySelector('.scroll-to-top');
-            if (window.scrollY > 300) {
-                scrollButton.classList.add('show');
-            } else {
-                scrollButton.classList.remove('show');
-            }
-        });
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const message = document.getElementById('message').value;
 
-        // Enhanced animations on scroll
-        const animateObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('animate-on-scroll');
-                }
-            });
-        }, { threshold: 0.1 });
+    alert(`Thank you, ${name}! Your message has been sent. I'll get back to you at ${email} soon 💙`);
 
-        document.querySelectorAll('.section, .card, .project-card, .testimonial').forEach(element => {
-            animateObserver.observe(element);
-        });
+    this.reset();
+});
 
-        // Parallax effect on hero
-        window.addEventListener('scroll', () => {
-            const hero = document.querySelector('.hero');
-            const scrolled = window.pageYOffset;
-            hero.style.transform = `translateY(${scrolled * 0.5}px)`;
-        });
-
-        // Staggered reveal for cards
-        const cardObserver = new IntersectionObserver((entries) => {
-            entries.forEach((entry, index) => {
-                if (entry.isIntersecting) {
-                    setTimeout(() => {
-                        entry.target.style.animation = 'slideUp 0.8s ease-out forwards';
-                    }, index * 100);
-                }
-            });
-        }, { threshold: 0.1 });
-
-        document.querySelectorAll('.card, .project-card, .testimonial').forEach(card => {
-            cardObserver.observe(card);
-        });
-
-        // Contact form submission
-        document.getElementById('contactForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
-            const message = document.getElementById('message').value;
-            alert(`Thank you, ${name}! Your message has been sent. We'll get back to you at ${email} soon.`);
-            // Here you can integrate with a service like EmailJS or a backend API
-            this.reset();
-        });
     </script>
 </body>
 </html>
