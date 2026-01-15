@@ -340,6 +340,7 @@
             transition: all 0.3s ease;
             z-index: 1000;
             box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);
+            animation: bounceIn 0.5s ease;
         }
         .scroll-to-top.show {
             opacity: 1;
@@ -349,9 +350,24 @@
             transform: scale(1.1);
             box-shadow: 0 6px 20px rgba(14, 165, 233, 0.4);
         }
+        @keyframes bounceIn {
+            0% { transform: scale(0.3); opacity: 0; }
+            50% { transform: scale(1.05); }
+            70% { transform: scale(0.9); }
+            100% { transform: scale(1); opacity: 1; }
+        }
         /* Enhanced Scroll Animations */
         .section.animate-on-scroll {
             animation: slideUp 0.8s ease-out forwards;
+        }
+        .card.animate-on-scroll {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+        .project-card.animate-on-scroll {
+            animation: slideInLeft 0.8s ease-out forwards;
+        }
+        .testimonial.animate-on-scroll {
+            animation: slideInRight 0.8s ease-out forwards;
         }
         @keyframes slideUp {
             from {
@@ -362,6 +378,41 @@
                 opacity: 1;
                 transform: translateY(0);
             }
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        /* Parallax Effect on Scroll */
+        .hero {
+            transform: translateY(0);
+            transition: transform 0.1s linear;
         }
         /* Professional Enhancements */
         body.light-mode .card, body.light-mode .project-card, body.light-mode .testimonial, body.light-mode .modal-content {
@@ -390,6 +441,7 @@
             <a href="#education">Education</a>
             <a href="#experience">Experience</a>
             <a href="#eligibility">Eligibility</a>
+            <a href="#certifications">Certifications</a>
             <a href="#skills">Skills</a>
             <a href="#projects">Projects</a>
             <a href="#testimonials">Testimonials</a>
@@ -400,15 +452,14 @@
 
     <section class="hero">
         <div>
-            <img src="https://i.imgur.com/yourphoto.jpg" alt="Jerom Requillo">
+            <img src="https://i.imgur.com/yourphoto.jpg" alt="Jerom Requillo" onerror="this.src='https://via.placeholder.com/200x200?text=Avatar'">
             <h1>Jerom Requillo, LPT</h1>
             <p>BS Engineering Technology Educator | Bridging Innovation and Learning</p>
             <button onclick="window.open('resume.pdf', '_blank')">Download Resume</button>
             <button onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Contact Me</button>
         </div>
     </section>
-
-    <div class="container">
+        <div class="container">
 
         <section id="about" class="section">
             <h2>About Me</h2>
@@ -444,11 +495,25 @@
         </section>
 
         <section id="eligibility" class="section">
-            <h2>Eligibility & Certifications</h2>
+            <h2>Eligibility</h2>
             <div class="cards">
                 <div class="card" onclick="openModal('elig1')">
                     <h3>Licensed Professional Teacher (LPT)</h3>
                     <p>Certified educator qualified to teach in Philippine educational institutions.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="certifications" class="section">
+            <h2>Other Certifications</h2>
+            <div class="cards">
+                <div class="card" onclick="openModal('cert1')">
+                    <h3>Teaching Certificate Curriculum</h3>
+                    <p>Certification in curriculum development and teaching methodologies for effective education.</p>
+                </div>
+                <div class="card" onclick="openModal('cert2')">
+                    <h3>NATIONAL CERTIFICATE II (Small Engine Servicing)</h3>
+                    <p>Technical certification for servicing small engines, applicable to automotive and marine fields.</p>
                 </div>
             </div>
         </section>
@@ -469,9 +534,6 @@
                     <p>Building interactive tools with HTML, CSS, JS for educational purposes.</p>
                 </div>
                 <div class="card" onclick="openModal('skill4')">
-                    <h3>Engineering Problem Solving</h3>
-                    <p>Applying analytical skills to real-world
-                                    <div class="card" onclick="openModal('skill4')">
                     <h3>Engineering Problem Solving</h3>
                     <p>Applying analytical skills to real-world educational challenges.</p>
                 </div>
@@ -576,6 +638,20 @@
             <span class="close" onclick="closeModal('elig1')">&times;</span>
             <h2>Licensed Professional Teacher (LPT)</h2>
             <p>Holds a valid LPT certification, qualifying me to teach in accredited educational institutions in the Philippines, with a commitment to professional development and ethical teaching standards.</p>
+        </div>
+    </div>
+    <div id="cert1" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('cert1')">&times;</span>
+            <h2>Teaching Certificate Curriculum</h2>
+            <p>This certification focuses on advanced curriculum design, ensuring alignment with educational standards and effective delivery of content to enhance student learning outcomes.</p>
+        </div>
+    </div>
+    <div id="cert2" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('cert2')">&times;</span>
+            <h2>NATIONAL CERTIFICATE II (Small Engine Servicing)</h2>
+            <p>A recognized qualification for servicing small engines, covering maintenance, repair, and troubleshooting techniques essential for automotive and marine applications.</p>
         </div>
     </div>
     <div id="skill1" class="modal">
@@ -693,8 +769,15 @@
             });
         }, { threshold: 0.1 });
 
-        document.querySelectorAll('.section').forEach(section => {
-            animateObserver.observe(section);
+        document.querySelectorAll('.section, .card, .project-card, .testimonial').forEach(element => {
+            animateObserver.observe(element);
+        });
+
+        // Parallax effect on hero
+        window.addEventListener('scroll', () => {
+            const hero = document.querySelector('.hero');
+            const scrolled = window.pageYOffset;
+            hero.style.transform = `translateY(${scrolled * 0.5}px)`;
         });
 
         // Contact form submission (placeholder - replace with actual backend)
