@@ -1,0 +1,557 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Portfolio of Jerom Requillo, LPT - A dedicated educator and BS Engineering Technology professional specializing in integrating technology and creative learning in education.">
+    <meta name="keywords" content="Jerom Requillo, Teacher, BS Engineering Technology, Portfolio, Education, Web Development">
+    <title>Jerom Requillo | Portfolio - Educator & Engineering Technology Professional</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="https://i.imgur.com/favicon.ico" type="image/x-icon"> <!-- Replace with actual favicon URL -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Inter", sans-serif;
+            scroll-behavior: smooth;
+        }
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #e2e8f0;
+            transition: all 0.3s ease;
+            overflow-x: hidden;
+        }
+        body.light-mode {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            color: #1e293b;
+        }
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 50px;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(15px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+        nav .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #0ea5e9;
+        }
+        nav a {
+            color: #e2e8f0;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        nav a:hover {
+            color: #0ea5e9;
+        }
+        nav a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background: #0ea5e9;
+            transition: width 0.3s ease;
+        }
+        nav a:hover::after {
+            width: 100%;
+        }
+        .toggle-theme {
+            cursor: pointer;
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+        .toggle-theme:hover {
+            transform: scale(1.1);
+        }
+        .hero {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            text-align: center;
+            background: linear-gradient(180deg, #0f172a, #020617);
+            padding: 0 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://i.imgur.com/abstract-bg.jpg') no-repeat center center/cover; /* Replace with subtle background image */
+            opacity: 0.1;
+            z-index: -1;
+        }
+        .hero img {
+            border-radius: 50%;
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            margin-bottom: 20px;
+            border: 4px solid #0ea5e9;
+            box-shadow: 0 10px 30px rgba(14, 165, 233, 0.3);
+            transition: transform 0.3s ease;
+        }
+        .hero img:hover {
+            transform: scale(1.05);
+        }
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+            background: linear-gradient(45deg, #0ea5e9, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hero p {
+            color: #94a3b8;
+            margin-bottom: 30px;
+            font-size: 1.2rem;
+        }
+        button {
+            padding: 12px 24px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            background: linear-gradient(45deg, #0ea5e9, #0284c7);
+            color: white;
+            margin: 5px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);
+        }
+        button:hover {
+            background: linear-gradient(45deg, #0284c7, #0369a1);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(14, 165, 233, 0.4);
+        }
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 100px 20px 50px;
+        }
+        .section {
+            margin-bottom: 100px;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.6s ease;
+        }
+        .section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            color: #e2e8f0;
+            border-bottom: 3px solid #0ea5e9;
+            display: inline-block;
+            padding-bottom: 10px;
+            font-weight: 600;
+        }
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+        .card {
+            background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
+            padding: 25px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(14, 165, 233, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+        .card:hover::before {
+            left: 100%;
+        }
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(14, 165, 233, 0.2);
+        }
+        .card h3 {
+            margin-bottom: 10px;
+            color: #0ea5e9;
+        }
+        .card p {
+            color: #94a3b8;
+            line-height: 1.6;
+        }
+        .projects {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        .project-card {
+            background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+        .project-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(14, 165, 233, 0.2);
+        }
+        .project-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        .project-card .content {
+            padding: 20px;
+        }
+        .project-card h3 {
+            margin-bottom: 10px;
+            color: #0ea5e9;
+        }
+        .project-card p {
+            color: #94a3b8;
+            margin-bottom: 15px;
+        }
+        #contact input, #contact textarea {
+            width: 100%;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #374151;
+            margin-bottom: 15px;
+            background: #1f2937;
+            color: #e2e8f0;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+        #contact input:focus, #contact textarea:focus {
+            outline: none;
+            border-color: #0ea5e9;
+        }
+        #contact button {
+            width: 100%;
+        }
+        .testimonials {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        .testimonial {
+            background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+        .testimonial p {
+            font-style: italic;
+            margin-bottom: 15px;
+        }
+        .testimonial cite {
+            font-weight: 600;
+            color: #0ea5e9;
+        }
+        footer {
+            text-align: center;
+            padding: 40px;
+            color: #94a3b8;
+            background: rgba(15, 23, 42, 0.9);
+        }
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            animation: fadeIn 0.3s ease;
+        }
+        .modal-content {
+            background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
+            margin: 10% auto;
+            padding: 30px;
+            border-radius: 15px;
+            width: 80%;
+            max-width: 600px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            animation: slideIn 0.3s ease;
+        }
+        .close {
+            color: #94a3b8;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close:hover {
+            color: #0ea5e9;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav { padding: 15px 20px; }
+            .hero h1 { font-size: 2.5rem; }
+            .hero img { width: 150px; height: 150px; }
+            .cards, .projects { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">Jerom Requillo</div>
+        <div>
+            <a href="#about">About</a>
+            <a href="#skills">Skills</a>
+            <a href="#projects">Projects</a>
+            <a href="#testimonials">Testimonials</a>
+            <a href="#contact">Contact</a>
+            <span class="toggle-theme" onclick="toggleTheme()">🌙</span>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div>
+            <img src="https://i.imgur.com/yourphoto.jpg" alt="Jerom Requillo">
+            <h1>Jerom Requillo, LPT</h1>
+            <p>BS Engineering Technology Educator | Bridging Innovation and Learning</p>
+            <button onclick="window.open('resume.pdf', '_blank')">Download Resume</button>
+            <button onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Contact Me</button>
+        </div>
+    </section>
+
+    <div class="container">
+
+        <section id="about" class="section">
+            <h2>About Me</h2>
+            <p>As a licensed professional teacher with a BS in Engineering Technology, I am passionate about fostering a dynamic learning environment where technology and education intersect. With years of experience in curriculum development and classroom innovation, I strive to inspire students through hands-on projects and interactive tools that prepare them for the future.</p>
+        </section>
+
+        <section id="skills" class="section">
+            <h2>My Skills</h2>
+            <div class="cards">
+                <div class="card" onclick="openModal('skill1')">
+                    <h3>Teaching Excellence</h3>
+                    <p>Expert in classroom management, lesson planning, and student assessment.</p>
+                </div>
+                <div class="card" onclick="openModal('skill2')">
+                    <h3>Curriculum Development</h3>
+                    <p>Designing innovative, tech-integrated educational programs.</p>
+                </div>
+                <div class="card" onclick="openModal('skill3')">
+                    <h3>Web Development</h3>
+                    <p>Building interactive tools with HTML, CSS, JS for educational purposes.</p>
+                </div>
+                <div class="card" onclick="openModal('skill4')">
+                    <h3>Engineering Problem Solving</h3>
+                    <p>Applying analytical skills to real-world educational challenges.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="projects" class="section">
+            <h2>Recent Projects</h2>
+            <div class="projects">
+                <div class="project-card" onclick="openModal('project1')">
+                    <img src="https://i.imgur.com/abc123.jpg" alt="STEM Project">
+                    <div class="content">
+                        <h3>STEM Learning Initiative</h3>
+                        <p>An interactive program integrating science, technology, engineering, and math for K-12 students.</p>
+                    </div>
+                </div>
+                <div class="project-card" onclick="openModal('project2')">
+                    <img src="https://i.imgur.com/def456.jpg" alt="E-Learning Platform">
+                    <div class="content">
+                        <h3>E-Learning Platform</h3>
+                        <p>A custom-built platform for remote learning with multimedia resources.</p>
+                    </div>
+                </div>
+                <div class="project-card" onclick="openModal('project3')">
+                    <img src="https://i.imgur.com/ghi789.jpg" alt="Robotics Workshop">
+                    <div class="content">
+                        <h3>Robotics Workshop</h3>
+                        <p>Hands-on workshops teaching robotics basics to engineering students.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="testimonials" class="section">
+            <h2>Testimonials</h2>
+            <div class="testimonials">
+                <div class="testimonial">
+                    <p>"Jerom's innovative teaching methods have transformed our classroom. His engineering background brings a unique perspective."</p>
+                    <cite>- Principal Smith, XYZ School</cite>
+                </div>
+                <div class="testimonial">
+                    <p>"The robotics workshop was engaging and educational. Highly recommend for tech-savvy educators."</p>
+                    <cite>- Student Parent, ABC Academy</cite>
+                </div>
+                <div class="testimonial">
+                    <p>"Jerom's web tools made learning interactive and fun. A true professional in education technology."</p>
+                    <cite>- Colleague, TechEd Institute</cite>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="section">
+            <h2>Get In Touch</h2>
+            <form id="contactForm">
+                <input type="text" id="name" placeholder="Your Name" required>
+                <input type="email" id="email" placeholder="Your Email" required>
+                <textarea id="message" rows="5" placeholder="Your Message" required></textarea>
+                <button type="submit">Send Message</button>
+            </form>
+        </section>
+
+    </div>
+
+    <footer>
+        © 2024 Jerom Requillo • All Rights Reserved | Built with Passion for Education
+    </footer>
+
+    <!-- Modals -->
+    <div id="skill1" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('skill1')">&times;</span>
+            <h2>Teaching Excellence</h2>
+            <p>Detailed expertise in classroom management, crafting engaging lesson plans, and implementing effective assessment strategies to ensure student success.</p>
+        </div>
+    </div>
+    <div id="skill2" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('skill2')">&times;</span>
+            <h2>Curriculum Development</h2>
+            <p>Specializing in creating innovative curricula that blend traditional education with modern technology, tailored for diverse learning needs.</p>
+        </div>
+    </div>
+    <div id="skill3" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('skill3')">&times;</span>
+            <h2
+                <div id="skill3" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('skill3')">&times;</span>
+            <h2>Web Development</h2>
+            <p>Proficient in creating dynamic and user-friendly web applications using HTML, CSS, and JavaScript. I specialize in developing educational tools that enhance learning experiences, such as interactive quizzes, virtual labs, and responsive dashboards tailored for classroom use.</p>
+        </div>
+    </div>
+    <div id="skill4" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('skill4')">&times;</span>
+            <h2>Engineering Problem Solving</h2>
+            <p>Leveraging my BS in Engineering Technology, I apply systematic problem-solving techniques to educational challenges. This includes troubleshooting technical issues in learning environments, optimizing workflows, and integrating engineering principles into STEM curricula for practical, real-world applications.</p>
+        </div>
+    </div>
+    <div id="project1" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('project1')">&times;</span>
+            <h2>STEM Learning Initiative</h2>
+            <p>This project involved designing and implementing a comprehensive STEM program for K-12 students, combining hands-on experiments, digital simulations, and collaborative projects. It resulted in a 30% increase in student engagement and improved test scores in science and math subjects.</p>
+        </div>
+    </div>
+    <div id="project2" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('project2')">&times;</span>
+            <h2>E-Learning Platform</h2>
+            <p>Developed a custom e-learning platform using modern web technologies, featuring video lectures, interactive assessments, and progress tracking. The platform supports remote learning and has been adopted by multiple schools, accommodating over 500 users with positive feedback on usability and accessibility.</p>
+        </div>
+    </div>
+    <div id="project3" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('project3')">&times;</span>
+            <h2>Robotics Workshop</h2>
+            <p>Conducted a series of robotics workshops for engineering students, teaching basics of robotics design, programming with Arduino, and sensor integration. Participants built functional robots, fostering creativity and technical skills, with many students pursuing advanced projects post-workshop.</p>
+        </div>
+    </div>
+
+    <script>
+        // Modal functions
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'block';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        };
+
+        // Theme toggle
+        function toggleTheme() {
+            const body = document.body;
+            const toggleIcon = document.querySelector('.toggle-theme');
+            body.classList.toggle('light-mode');
+            toggleIcon.textContent = body.classList.contains('light-mode') ? '☀️' : '🌙';
+        }
+
+        // Scroll animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.section').forEach(section => {
+            observer.observe(section);
+        });
+
+        // Contact form submission (placeholder - replace with actual backend)
+        document.getElementById('contactForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const message = document.getElementById('message').value;
+            alert(`Thank you, ${name}! Your message has been sent. We'll get back to you at ${email} soon.`);
+            // Here you can integrate with a service like EmailJS or a backend API
+            this.reset();
+        });
+    </script>
+
+</body>
+</html>
