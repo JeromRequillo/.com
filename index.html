@@ -19,62 +19,101 @@
         body {
             background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
             color: #e2e8f0;
-            transition: all 0.3s ease;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             overflow-x: hidden;
+            cursor: none; /* Hide default cursor */
         }
         body.light-mode {
             background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
             color: #1e293b;
+        }
+        /* Custom Cursor */
+        .cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle, #0ea5e9 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.1s ease;
+            mix-blend-mode: difference;
+        }
+        .cursor-trail {
+            position: fixed;
+            width: 40px;
+            height: 40px;
+            background: radial-gradient(circle, rgba(14, 165, 233, 0.3) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9998;
+            transition: transform 0.2s ease;
         }
         nav {
             position: fixed;
             top: 0;
             width: 100%;
             padding: 20px 50px;
-            background: rgba(15, 23, 42, 0.95);
-            backdrop-filter: blur(15px);
+            background: rgba(15, 23, 42, 0.1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(14, 165, 233, 0.1);
             display: flex;
             justify-content: space-between;
             align-items: center;
             z-index: 1000;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
         }
         nav .logo {
             font-size: 1.5rem;
             font-weight: 700;
             color: #0ea5e9;
+            background: linear-gradient(45deg, #0ea5e9, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            transition: transform 0.3s ease;
+        }
+        nav .logo:hover {
+            transform: scale(1.05);
         }
         nav a {
             color: #e2e8f0;
             text-decoration: none;
             margin: 0 15px;
             font-weight: 500;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
+            overflow: hidden;
+        }
+        nav a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(14, 165, 233, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+        nav a:hover::before {
+            left: 100%;
         }
         nav a:hover {
             color: #0ea5e9;
-        }
-        nav a::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: -5px;
-            left: 0;
-            background: #0ea5e9;
-            transition: width 0.3s ease;
-        }
-        nav a:hover::after {
-            width: 100%;
+            transform: translateY(-2px);
+            text-shadow: 0 0 10px rgba(14, 165, 233, 0.5);
         }
         .toggle-theme {
-            cursor: pointer;
+            cursor: none;
             font-size: 1.5rem;
-            transition: transform 0.3s ease;
+            transition: transform 0.3s ease, filter 0.3s ease;
+            filter: drop-shadow(0 0 5px rgba(14, 165, 233, 0.3));
         }
         .toggle-theme:hover {
-            transform: scale(1.1);
+            transform: scale(1.1) rotate(15deg);
+            filter: drop-shadow(0 0 10px rgba(14, 165, 233, 0.6));
         }
         .hero {
             display: flex;
@@ -86,6 +125,7 @@
             padding: 0 20px;
             position: relative;
             overflow: hidden;
+            will-change: transform;
         }
         .hero::before {
             content: '';
@@ -97,6 +137,8 @@
             background: url('https://i.imgur.com/abstract-bg.jpg') no-repeat center center/cover; /* Replace with subtle background image */
             opacity: 0.1;
             z-index: -1;
+            transform: translateY(0);
+            transition: transform 0.1s linear;
         }
         .hero img {
             border-radius: 50%;
@@ -105,12 +147,25 @@
             object-fit: cover;
             margin-bottom: 20px;
             border: 4px solid #0ea5e9;
-            box-shadow: 0 10px 30px rgba(14, 165, 233, 0.3);
-            transition: transform 0.3s ease;
-            animation: fadeInUp 1s ease-out;
+            box-shadow: 0 10px 30px rgba(14, 165, 233, 0.3), 0 0 20px rgba(14, 165, 233, 0.2);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: heroImageGlow 2s ease-in-out infinite alternate;
+            position: relative;
+        }
+        .hero img::after {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(14, 165, 233, 0.1) 0%, transparent 70%);
+            animation: pulse 2s ease-in-out infinite;
         }
         .hero img:hover {
-            transform: scale(1.05);
+            transform: scale(1.05) rotate(5deg);
+            box-shadow: 0 15px 40px rgba(14, 165, 233, 0.5), 0 0 30px rgba(14, 165, 233, 0.3);
         }
         .hero h1 {
             font-size: 3.5rem;
@@ -123,31 +178,59 @@
             overflow: hidden;
             white-space: nowrap;
             width: 0;
-            animation: typeWriter 2s steps(18, end) forwards; /* Adjusted steps to match character count */
+            animation: typeWriter 3s steps(18, end) forwards, textGlow 2s ease-in-out infinite alternate 3s;
+            position: relative;
+        }
+        .hero h1::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #0ea5e9, #06b6d4);
+            opacity: 0.1;
+            animation: morph 3s ease-in-out infinite;
+            z-index: -1;
         }
         .hero p {
             color: #94a3b8;
             margin-bottom: 30px;
             font-size: 1.2rem;
-            animation: fadeIn 1s ease-out 1.5s both;
+            animation: fadeIn 1s ease-out 3.5s both, subtleBounce 2s ease-in-out infinite 4s;
         }
         button {
             padding: 12px 24px;
-            border-radius: 8px;
+            border-radius: 12px;
             border: none;
-            cursor: pointer;
+            cursor: none;
             background: linear-gradient(45deg, #0ea5e9, #0284c7);
             color: white;
             margin: 5px;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             font-weight: 500;
-            box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);
-            animation: fadeIn 1s ease-out 2s both;
+            box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3), 0 0 10px rgba(14, 165, 233, 0.2);
+            position: relative;
+            overflow: hidden;
+            animation: fadeIn 1s ease-out 4s both;
+        }
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+        button:hover::before {
+            left: 100%;
         }
         button:hover {
             background: linear-gradient(45deg, #0284c7, #0369a1);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(14, 165, 233, 0.4);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 25px rgba(14, 165, 233, 0.5), 0 0 20px rgba(14, 165, 233, 0.4);
         }
         .container {
             max-width: 1200px;
@@ -158,7 +241,7 @@
             margin-bottom: 100px;
             opacity: 0;
             transform: translateY(50px);
-            transition: all 0.6s ease;
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .section.visible {
             opacity: 1;
@@ -172,6 +255,19 @@
             display: inline-block;
             padding-bottom: 10px;
             font-weight: 600;
+            position: relative;
+            overflow: hidden;
+        }
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, #0ea5e9, #06b6d4);
+            transform: translateX(-100%);
+            animation: slideInBorder 1s ease-out forwards;
         }
         body.light-mode h2 {
             color: #1e293b;
@@ -182,14 +278,18 @@
             gap: 30px;
         }
         .card {
-            background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
+            background: rgba(15, 23, 42, 0.1);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
             padding: 25px;
-            border-radius: 15px;
-            cursor: pointer;
-            transition: all 0.3s ease;
+            border-radius: 20px;
+            cursor: none;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2), 0 0 15px rgba(14, 165, 233, 0.1);
+            border: 1px solid rgba(14, 165, 233, 0.1);
+            will-change: transform;
         }
         .card::before {
             content: '';
@@ -199,22 +299,31 @@
             width: 100%;
             height: 100%;
             background: linear-gradient(90deg, transparent, rgba(14, 165, 233, 0.1), transparent);
-            transition: left 0.5s ease;
+            transition: left 0.6s ease;
         }
         .card:hover::before {
             left: 100%;
         }
         .card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 40px rgba(14, 165, 233, 0.2);
+            transform: translateY(-10px) rotateX(5deg) rotateY(5deg);
+            box-shadow: 0 20px 50px rgba(14, 165, 233, 0.3), 0 0 30px rgba(14, 165, 233, 0.2);
         }
         .card h3 {
             margin-bottom: 10px;
             color: #0ea5e9;
+            transition: color 0.3s ease;
+        }
+        .card:hover h3 {
+            color: #06b6d4;
+            text-shadow: 0 0 10px rgba(6, 182, 212, 0.5);
         }
         .card p {
             color: #94a3b8;
             line-height: 1.6;
+            transition: color 0.3s ease;
+        }
+        .card:hover p {
+            color: #cbd5e1;
         }
         .projects {
             display: grid;
@@ -222,21 +331,29 @@
             gap: 30px;
         }
         .project-card {
-            background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
-            border-radius: 15px;
+            background: rgba(15, 23, 42, 0.1);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-radius: 20px;
             overflow: hidden;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: none;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2), 0 0 15px rgba(14, 165, 233, 0.1);
+            border: 1px solid rgba(14, 165, 233, 0.1);
+            will-change: transform;
         }
         .project-card:hover {
-            transform: scale(1.05);
-            box-shadow: 0 15px 40px rgba(14, 165, 233, 0.2);
+            transform: scale(1.05) rotateX(5deg);
+            box-shadow: 0 20px 50px rgba(14, 165, 233, 0.3), 0 0 30px rgba(14, 165, 233, 0.2);
         }
         .project-card img {
             width: 100%;
             height: 200px;
             object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        .project-card:hover img {
+            transform: scale(1.1);
         }
         .project-card .content {
             padding: 20px;
@@ -244,25 +361,38 @@
         .project-card h3 {
             margin-bottom: 10px;
             color: #0ea5e9;
+            transition: color 0.3s ease;
+        }
+        .project-card:hover h3 {
+            color: #06b6d4;
+            text-shadow: 0 0 10px rgba(6, 182, 212, 0.5);
         }
         .project-card p {
             color: #94a3b8;
             margin-bottom: 15px;
+            transition: color 0.3s ease;
+        }
+        .project-card:hover p {
+            color: #cbd5e1;
         }
         #contact input, #contact textarea {
             width: 100%;
             padding: 15px;
-            border-radius: 8px;
-            border: 1px solid #374151;
+            border-radius: 12px;
+            border: 1px solid rgba(14, 165, 233, 0.2);
             margin-bottom: 15px;
-            background: #1f2937;
+            background: rgba(15, 23, 42, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             color: #e2e8f0;
             font-size: 1rem;
-            transition: border-color 0.3s ease;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px rgba(14, 165, 233, 0.1);
         }
         #contact input:focus, #contact textarea:focus {
             outline: none;
             border-color: #0ea5e9;
+            box-shadow: 0 0 20px rgba(14, 165, 233, 0.3);
         }
         #contact button {
             width: 100%;
@@ -273,564 +403,19 @@
             gap: 30px;
         }
         .testimonial {
-            background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
+            background: rgba(15, 23, 42, 0.1);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
             padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2), 0 0 15px rgba(14, 165, 233, 0.1);
+            border: 1px solid rgba(14, 165, 233, 0.1);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            will-change: transform;
+        }
+        .testimonial:hover {
+            transform: translateY(-5px) rotateX(2deg);
+            box-shadow: 0 15px 40px rgba(14, 165, 233, 0.2), 0 0 25px rgba(14, 165, 233, 0.2);
         }
         .testimonial p {
-            font-style: italic;
-            margin-bottom: 15px;
-        }
-        .testimonial cite {
-            font-weight: 600;
-            color: #0ea5e9;
-        }
-        footer {
-            text-align: center;
-            padding: 40px;
-            color: #94a3b8;
-            background: rgba(15, 23, 42, 0.9);
-        }
-        body.light-mode footer {
-            background: rgba(248, 250, 252, 0.9);
-            color: #64748b;
-        }
-        /* Modal Styles */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 2000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(5px);
-            animation: fadeIn 0.3s ease;
-        }
-        .modal-content {
-            background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
-            margin: 10% auto;
-            padding: 30px;
-            border-radius: 15px;
-            width: 80%;
-            max-width: 600px;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
-            animation: slideIn 0.3s ease;
-        }
-        .close {
-            color: #94a3b8;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .close:hover {
-            color: #0ea5e9;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        @keyframes slideIn {
-            from { transform: translateY(-50px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-        /* Scroll to Top Button */
-        .scroll-to-top {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(45deg, #0ea5e9, #0284c7);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-            z-index: 1000;
-            box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);
-            animation: bounceIn 0.5s ease;
-        }
-        .scroll-to-top.show {
-            opacity: 1;
-            visibility: visible;
-        }
-        .scroll-to-top:hover {
-            transform: scale(1.1);
-            box-shadow: 0 6px 20px rgba(14, 165, 233, 0.4);
-        }
-        @keyframes bounceIn {
-            0% { transform: scale(0.3); opacity: 0; }
-            50% { transform: scale(1.05); }
-            70% { transform: scale(0.9); }
-            100% { transform: scale(1); opacity: 1; }
-        }
-        /* Enhanced Scroll Animations */
-        .section.animate-on-scroll {
-            animation: slideUp 0.8s ease-out forwards;
-        }
-        .card.animate-on-scroll {
-            animation: fadeInUp 0.8s ease-out forwards;
-        }
-        .project-card.animate-on-scroll {
-            animation: slideInLeft 0.8s ease-out forwards;
-        }
-        .testimonial.animate-on-scroll {
-            animation: slideInRight 0.8s ease-out forwards;
-        }
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(100px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        @keyframes slideInLeft {
-            from {
-                opacity: 0;
-                transform: translateX(-100px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-        @keyframes slideInRight {
-            from {
-                opacity: 0;
-                transform: translateX(100px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-        /* Typing Animation for Hero */
-        @keyframes typeWriter {
-            from { width: 0; }
-            to { width: 100%; }
-        }
-        /* Parallax Effect on Scroll */
-        .hero {
-            transform: translateY(0);
-            transition: transform 0.1s linear;
-        }
-        /* Personal Info Section */
-        .personal-info {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        .personal-info div {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .personal-info span {
-            font-size: 1.2rem;
-        }
-        /* Professional Enhancements */
-        body.light-mode .card, body.light-mode .project-card, body.light-mode .testimonial, body.light-mode .modal-content {
-            background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
-            color: #1e293b;
-        }
-        body.light-mode .card p, body.light-mode .project-card p, body.light-mode .testimonial p {
-            color: #64748b;
-        }
-        body.light-mode .personal-info span {
-            color: #1e293b;
-        }
-        /* Responsive */
-        @media (max-width: 768px) {
-            nav { padding: 15px 20px; }
-            .hero h1 { font-size: 2.5rem; }
-            .hero img { width: 150px; height: 150px; }
-            .cards, .projects { grid-template-columns: 1fr; }
-            .scroll-to-top { bottom: 20px; right: 20px; }
-        }
-    </style>
-</head>
-<body>
-
-    <nav>
-        <div class="logo">Jerom Requillo</div>
-        <div>
-            <a href="#about">About</a>
-            <a href="#personal">Personal Info</a>
-            <a href="#education">Education</a>
-            <a href="#experience">Experience</a>
-            <a href="#eligibility">Eligibility</a>
-            <a href="#certifications">Certifications</a>
-            <a href="#skills">Skills</a>
-            <a href="#projects">Projects</a>
-            <a href="#testimonials">Testimonials</a>
-            <a href="#contact">Contact</a>
-            <span class="toggle-theme" onclick="toggleTheme()">🌙</span>
-        </div>
-    </nav>
-
-    <section class="hero">
-        <div>
-            <img src="https://i.imgur.com/yourphoto.jpg" alt="Jerom Requillo" onerror="this.src='https://via.placeholder.com/200x200?text=Avatar'">
-            <h1>Jerom Requillo, LPT</h1>
-            <p>BS Engineering Technology Educator | Bridging Innovation and Learning</p>
-            <button onclick="window.open('resume.pdf', '_blank')">Download Resume</button>
-            <button onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Contact Me</button>
-        </div>
-    </section>
-
-    <div class="container">
-
-        <section id="about" class="section">
-            <h2>About Me</h2>
-                        <p>As a licensed professional teacher with a BS in Engineering Technology, I am passionate about fostering a dynamic learning environment where technology and education intersect. With years of experience in curriculum development and classroom innovation, I strive to inspire students through hands-on projects and interactive tools that prepare them for the future.</p>
-        </section>
-
-       <section id="personal" class="section">
-    <h2>Personal Information</h2>
-    <div class="personal-info">
-        <div><span>📍</span><p>205 E Rodriguez Sr. Ave. Quezon City</p></div>
-        <div><span>🎓</span><p>Licensed Professional Teacher</p></div>
-        <div><span>🎵</span><p>BS Engineering Technology</p></div>
-    </div>
-</section>
-            
-        <section id="education" class="section">
-            <h2>Educational Attainment</h2>
-            <div class="cards">
-                <div class="card" onclick="openModal('edu1')">
-                    <h3>Bachelor of Science in Engineering Technology</h3>
-                    <p>Graduated with a focus on integrating engineering principles into educational practices.</p>
-                </div>
-            </div>
-        </section>
-
-        <section id="experience" class="section">
-            <h2>Work Experience</h2>
-            <div class="cards">
-                <div class="card" onclick="openModal('exp1')">
-                    <h3>Teacher (2 Years)</h3>
-                    <p>Dedicated educator fostering student growth through innovative teaching methods.</p>
-                </div>
-                <div class="card" onclick="openModal('exp2')">
-                    <h3>Marine Outboard Teacher (1 Year)</h3>
-                    <p>Specialized instructor in marine outboard systems, combining technical expertise with educational delivery.</p>
-                </div>
-                <div class="card" onclick="openModal('exp3')">
-                    <h3>Automotive Parts Expediter (5 Years)</h3>
-                    <p>Managed logistics and expedited automotive parts, ensuring timely delivery and operational efficiency.</p>
-                </div>
-            </div>
-        </section>
-
-        <section id="eligibility" class="section">
-            <h2>Eligibility</h2>
-            <div class="cards">
-                <div class="card" onclick="openModal('elig1')">
-                    <h3>Licensed Professional Teacher (LPT)</h3>
-                    <p>Certified educator qualified to teach in Philippine educational institutions.</p>
-                </div>
-            </div>
-        </section>
-
-        <section id="certifications" class="section">
-            <h2>Other Certifications</h2>
-            <div class="cards">
-                <div class="card" onclick="openModal('cert1')">
-                    <h3>Teaching Certificate Curriculum</h3>
-                    <p>Certification in curriculum development and teaching methodologies for effective education.</p>
-                </div>
-                <div class="card" onclick="openModal('cert2')">
-                    <h3>NATIONAL CERTIFICATE II (Small Engine Servicing)</h3>
-                    <p>Technical certification for servicing small engines, applicable to automotive and marine fields.</p>
-                </div>
-            </div>
-        </section>
-
-        <section id="skills" class="section">
-            <h2>My Skills</h2>
-            <div class="cards">
-                <div class="card" onclick="openModal('skill1')">
-                    <h3>Teaching Excellence</h3>
-                    <p>Expert in classroom management, lesson planning, and student assessment.</p>
-                </div>
-                <div class="card" onclick="openModal('skill2')">
-                    <h3>Curriculum Development</h3>
-                    <p>Designing innovative, tech-integrated educational programs.</p>
-                </div>
-                <div class="card" onclick="openModal('skill3')">
-                    <h3>Educational Technology Integration</h3>
-                    <p>Integrating technology tools into teaching to enhance learning experiences and student engagement.</p>
-                </div>
-                <div class="card" onclick="openModal('skill4')">
-                    <h3>Engineering Problem Solving</h3>
-                    <p>Applying analytical skills to real-world educational challenges.</p>
-                </div>
-            </div>
-        </section>
-
-        <section id="projects" class="section">
-            <h2>Recent Projects</h2>
-            <div class="projects">
-                <div class="project-card" onclick="openModal('project1')">
-                    <img src="https://i.imgur.com/abc123.jpg" alt="STEM Project">
-                    <div class="content">
-                        <h3>STEM Learning Initiative</h3>
-                        <p>An interactive program integrating science, technology, engineering, and math for K-12 students.</p>
-                    </div>
-                </div>
-                <div class="project-card" onclick="openModal('project2')">
-                    <img src="https://i.imgur.com/def456.jpg" alt="E-Learning Platform">
-                    <div class="content">
-                        <h3>E-Learning Platform</h3>
-                        <p>A custom-built platform for remote learning with multimedia resources.</p>
-                    </div>
-                </div>
-                <div class="project-card" onclick="openModal('project3')">
-                    <img src="https://i.imgur.com/ghi789.jpg" alt="Robotics Workshop">
-                    <div class="content">
-                        <h3>Robotics Workshop</h3>
-                        <p>Hands-on workshops teaching robotics basics to engineering students.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="testimonials" class="section">
-            <h2>Testimonials</h2>
-            <div class="testimonials">
-                <div class="testimonial">
-                    <p>"Jerom's innovative teaching methods have transformed our classroom. His engineering background brings a unique perspective."</p>
-                    <cite>- Principal Smith, XYZ School</cite>
-                </div>
-                <div class="testimonial">
-                    <p>"The robotics workshop was engaging and educational. Highly recommend for tech-savvy educators."</p>
-                    <cite>- Student Parent, ABC Academy</cite>
-                </div>
-                <div class="testimonial">
-                    <p>"Jerom's web tools made learning interactive and fun. A true professional in education technology."</p>
-                    <cite>- Colleague, TechEd Institute</cite>
-                </div>
-            </div>
-        </section>
-
-        <section id="contact" class="section">
-            <h2>Get In Touch</h2>
-            <form id="contactForm">
-                <input type="text" id="name" placeholder="Your Name" required>
-                <input type="email" id="email" placeholder="Your Email" required>
-                <textarea id="message" rows="5" placeholder="Your Message" required></textarea>
-                <button type="submit">Send Message</button>
-            </form>
-        </section>
-
-    </div>
-
-    <footer>
-        © 2024 Jerom Requillo • All Rights Reserved | Built with Passion for Education
-    </footer>
-
-    <!-- Scroll to Top Button -->
-    <div class="scroll-to-top" onclick="scrollToTop()">↑</div>
-
-    <!-- Modals -->
-    <div id="edu1" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('edu1')">&times;</span>
-            <h2>Bachelor of Science in Engineering Technology</h2>
-            <p>Completed my degree with a strong foundation in engineering principles, focusing on practical applications in technology and education. This background equips me to integrate innovative solutions into teaching methodologies.</p>
-        </div>
-    </div>
-    <div id="exp1" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('exp1')">&times;</span>
-            <h2>Teacher (2 Years)</h2>
-            <p>As a dedicated educator, I have spent 2 years inspiring students through engaging lessons, fostering critical thinking, and adapting to diverse learning needs in a classroom setting.</p>
-        </div>
-    </div>
-    <div id="exp2" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('exp2')">&times;</span>
-            <h2>Marine Outboard Teacher (1 Year)</h2>
-            <p>Specialized in teaching marine outboard systems, combining hands-on technical training with educational best practices to prepare students for real-world applications in maritime engineering.</p>
-        </div>
-    </div>
-    <div id="exp3" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('exp3')">&times;</span>
-            <h2>Automotive Parts Expediter (5 Years)</h2>
-            <p>Managed the logistics and expediting of automotive parts for 5 years, ensuring efficient supply chain operations, timely deliveries, and coordination with suppliers and teams.</p>
-        </div>
-    </div>
-    <div id="elig1" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('elig1')">&times;</span>
-            <h2>Licensed Professional Teacher (LPT)</h2>
-            <p>Holds a valid LPT certification, qualifying me to teach in accredited educational institutions in the Philippines, with a commitment to professional development and ethical teaching standards.</p>
-        </div>
-    </div>
-    <div id="cert1" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('cert1')">&times;</span>
-            <h2>Teaching Certificate Curriculum</h2>
-            <p>This certification focuses on advanced curriculum design, ensuring alignment with educational standards and effective delivery of content to enhance student learning outcomes.</p>
-        </div>
-    </div>
-    <div id="cert2" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('cert2')">&times;</span>
-            <h2>NATIONAL CERTIFICATE II (Small Engine Servicing)</h2>
-            <p>A recognized qualification for servicing small engines, covering maintenance, repair, and troubleshooting techniques essential for automotive and marine applications.</p>
-        </div>
-    </div>
-    <div id="skill1" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('skill1')">&times;</span>
-            <h2>Teaching Excellence</h2>
-            <p>Detailed expertise in classroom management, crafting engaging lesson plans, and implementing effective assessment strategies to ensure student success.</p>
-        </div>
-    </div>
-    <div id="skill2" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('skill2')">&times;</span>
-            <h2>Curriculum Development</h2>
-            <p>Specializing in creating innovative curricula that blend traditional education with modern technology, tailored for diverse learning needs.</p>
-        </div>
-    </div>
-    <div id="skill3" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('skill3')">&times;</span>
-            <h2>Educational Technology Integration</h2>
-            <p>Proficient in integrating technology into educational settings, including the use of digital tools, multimedia resources, and interactive platforms to enhance student engagement and learning outcomes. This includes basic web-based tools for classroom use, focusing on pedagogical applications rather than advanced development.</p>
-        </div>
-    </div>
-    <div id="skill4" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('skill4')">&times;</span>
-            <h2>Engineering Problem Solving</h2>
-            <p>Leveraging my BS in Engineering Technology, I apply systematic problem-solving techniques to educational challenges. This includes troubleshooting technical issues in learning environments, optimizing workflows, and integrating engineering principles into STEM curricula for practical, real-world applications.</p>
-        </div>
-    </div>
-    <div id="project1" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('project1')">&times;</span>
-            <h2>STEM Learning Initiative</h2>
-            <p>This project involved designing and implementing a comprehensive STEM program for K-12 students, combining hands-on experiments, digital simulations, and collaborative projects. It resulted in a 30% increase in student engagement and improved test scores in science and math subjects.</p>
-        </div>
-    </div>
-    <div id="project2" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('project2')">&times;</span>
-            <h2>E-Learning Platform</h2>
-            <p>Developed a custom e-learning platform using modern web technologies, featuring video lectures, interactive assessments, and progress tracking. The platform supports remote learning and has been adopted by multiple schools, accommodating over 500 users with positive feedback on usability and accessibility.</p>
-        </div>
-    </div>
-    <div id="project3" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('project3')">&times;</span>
-            <h2>Robotics Workshop</h2>
-            <p>Conducted a series of robotics workshops for engineering students, teaching basics of robotics design, programming with Arduino, and sensor integration. Participants built functional robots, fostering creativity and technical skills, with many students pursuing advanced projects post-workshop.</p>
-        </div>
-    </div>
-
-    <script>
-        // Modal functions
-        function openModal(modalId) {
-            document.getElementById(modalId).style.display = 'block';
-        }
-
-        function closeModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
-        }
-
-        // Close modal when clicking outside
-        window.onclick = function(event) {
-            const modals = document.querySelectorAll('.modal');
-            modals.forEach(modal => {
-                if (event.target === modal) {
-                    modal.style.display = 'none';
-                }
-            });
-        };
-
-        // Theme toggle
-        function toggleTheme() {
-            const body = document.body;
-            const toggleIcon = document.querySelector('.toggle-theme');
-            body.classList.toggle('light-mode');
-            toggleIcon.textContent = body.classList.contains('light-mode') ? '☀️' : '🌙';
-        }
-
-        // Scroll animations
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        }, { threshold: 0.1 });
-
-        document.querySelectorAll('.section').forEach(section => {
-            observer.observe(section);
-        });
-
-        // Scroll to Top functionality
-        function scrollToTop() {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        // Show/Hide Scroll to Top Button
-        window.addEventListener('scroll', () => {
-            const scrollButton = document.querySelector('.scroll-to-top');
-            if (window.scrollY > 300) {
-                scrollButton.classList.add('show');
-            } else {
-                scrollButton.classList.remove('show');
-            }
-        });
-
-        // Enhanced animations on scroll
-        const animateObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('animate-on-scroll');
-                }
-            });
-        }, { threshold: 0.1 });
-
-        document.querySelectorAll('.section, .card, .project-card, .testimonial').forEach(element => {
-            animateObserver.observe(element);
-        });
-        
-        document.getElementById('contactForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
-            const message = document.getElementById('message').value;
-            alert(`Thank you, ${name}! Your message has been sent. We'll get back to you at ${email} soon.`);
-            // Here you can integrate with a service like EmailJS or a backend API
-            this.reset();
-        });    
-    </script>
-</body>
-</html>
+            font-style
