@@ -810,15 +810,7 @@
         document.querySelectorAll('.section, .card, .project-card, .testimonial').forEach(element => {
             animateObserver.observe(element);
         });
-
-        // Parallax effect on hero
-        window.addEventListener('scroll', () => {
-            const hero = document.querySelector('.hero');
-            const scrolled = window.pageYOffset;
-            hero.style.transform = `translateY(${scrolled * 0.5}px)`;
-        });
-
-        // Contact form submission (placeholder - replace with actual backend)
+        
         document.getElementById('contactForm').addEventListener('submit', function(event) {
             event.preventDefault();
             const name = document.getElementById('name').value;
@@ -827,37 +819,6 @@
             alert(`Thank you, ${name}! Your message has been sent. We'll get back to you at ${email} soon.`);
             // Here you can integrate with a service like EmailJS or a backend API
             this.reset();
-        });
-    </script>
-<script>
-    function toggleTheme() {
-        document.body.classList.toggle('light-mode');
-    }
-
-    const sections = document.querySelectorAll('.section');
-    window.addEventListener('scroll', () => {
-        sections.forEach(section => {
-            const rect = section.getBoundingClientRect();
-            if (rect.top < window.innerHeight - 100) {
-                section.classList.add('visible');
-            }
-        });
-    });
-
-    const scrollBtn = document.querySelector('.scroll-to-top');
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 300) {
-            scrollBtn.classList.add('show');
-        } else {
-            scrollBtn.classList.remove('show');
-        }
-    });
-
-    scrollBtn?.addEventListener('click', () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-</script>
-<div class="scroll-to-top">↑</div>
-    
+        });    
 </body>
 </html>
